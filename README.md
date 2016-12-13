@@ -6,14 +6,14 @@ A lightweight VPC module for Terraform.
 
 ```hcl
 module "vpc" {
-  source = "github.com/turnbullpublishing/tf_vpc"
-
-  environment = "vpc_name"
-  key_name = "james"
-
-  cidr = "10.0.0.0/16"
-  public_subnets = ["10.0.1.0/24"]
-  private_subets = ["10.0.100.0/24"]
+  source          = "github.com/empaticoOrg/tf_vpc.git?ref=v0.0.3"
+  environment     = "${var.environment}"
+  app             = "${var.app}"
+  region          = "${var.region}"
+  key_name        = "${var.key_name}"
+  vpc_cidr        = "${var.vpc_cidr}"
+  public_subnets  = ["${var.public_subnets}"]
+  private_subnets = ["${var.private_subnets}"]
 }
 ```
 
