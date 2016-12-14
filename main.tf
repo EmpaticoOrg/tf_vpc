@@ -4,7 +4,7 @@ resource "aws_vpc" "environment" {
   enable_dns_support   = "${var.enable_dns_support}"
 
   tags {
-    Name = "${var.environment} ${var.app}"
+    Name = "${var.environment}"
   }
 }
 
@@ -12,7 +12,7 @@ resource "aws_internet_gateway" "environment" {
   vpc_id = "${aws_vpc.environment.id}"
 
   tags {
-    Name = "${var.environment} ${var.app}-igw"
+    Name = "${var.environment}-igw"
   }
 }
 
@@ -20,7 +20,7 @@ resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.environment.id}"
 
   tags {
-    Name = "${var.environment} ${var.app}-public"
+    Name = "${var.environment}-public"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_route_table" "private" {
   vpc_id = "${aws_vpc.environment.id}"
 
   tags {
-    Name = "${var.environment} ${var.app}-private"
+    Name = "${var.environment}-private"
   }
 }
 
@@ -52,7 +52,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = "${var.map_public_ip_on_launch}"
 
   tags {
-    Name = "${var.environment} ${var.app}-public-${count.index}"
+    Name = "${var.environment}-public-${count.index}"
   }
 
   count = "${length(var.public_subnets)}"
@@ -64,7 +64,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = "false"
 
   tags {
-    Name = "${var.environment} ${var.app}-private-${count.index}"
+    Name = "${var.environment}-private-${count.index}"
   }
 
   count = "${length(var.private_subnets)}"
@@ -97,7 +97,7 @@ resource "aws_nat_gateway" "environment" {
 
 resource "aws_security_group" "bastion" {
   vpc_id      = "${aws_vpc.environment.id}"
-  name        = "${var.environment} ${var.app}-bastion-host"
+  name        = "${var.environment}-bastion-host"
   description = "Allow SSH to bastion host"
 
   ingress {
@@ -122,7 +122,7 @@ resource "aws_security_group" "bastion" {
   }
 
   tags {
-    Name = "${var.environment} ${var.app}-bastion-sg"
+    Name = "${var.environment}-bastion-sg"
   }
 }
 
@@ -136,6 +136,6 @@ resource "aws_instance" "bastion" {
   associate_public_ip_address = true
 
   tags {
-    Name = "${var.environment} ${var.app}-bastion"
+    Name = "${var.environment}-bastion"
   }
 }

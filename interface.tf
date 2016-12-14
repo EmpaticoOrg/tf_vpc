@@ -67,11 +67,6 @@ variable "map_public_ip_on_launch" {
   default     = true
 }
 
-variable "app" {
-  description = "The optional app name for identifying the VPC"
-  default     = ""
-}
-
 output "vpc_id" {
   value = "${aws_vpc.environment.id}"
 }
