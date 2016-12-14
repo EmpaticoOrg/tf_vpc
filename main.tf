@@ -1,3 +1,7 @@
+data "aws_route53_zone" "domain" {
+    name = "${var.domain}."
+}
+
 resource "aws_vpc" "environment" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
@@ -138,4 +142,12 @@ resource "aws_instance" "bastion" {
   tags {
     Name = "${var.environment}-bastion"
   }
+}
+
+resource "aws_route53_record" "bastion" {
+  zone_id = "${data.aws_route53_zone.domain.zone_id}"
+  name = "bastion.${data.aws_route53_zone.domain.name}"
+  type = "A"
+  ttl = "300"
+  records = ["${aws_instance.bastion.public_ip}"]
 }
