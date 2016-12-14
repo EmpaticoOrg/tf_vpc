@@ -1,5 +1,5 @@
 data "aws_route53_zone" "domain" {
-    name = "${var.domain}."
+  name = "${var.domain}."
 }
 
 resource "aws_vpc" "environment" {
@@ -146,8 +146,8 @@ resource "aws_instance" "bastion" {
 
 resource "aws_route53_record" "bastion" {
   zone_id = "${data.aws_route53_zone.domain.zone_id}"
-  name = "bastion.${data.aws_route53_zone.domain.name}"
-  type = "A"
-  ttl = "300"
+  name    = "bastion.${data.aws_route53_zone.domain.name}"
+  type    = "A"
+  ttl     = "300"
   records = ["${aws_instance.bastion.public_ip}"]
 }
