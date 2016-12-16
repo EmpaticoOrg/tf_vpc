@@ -83,3 +83,7 @@ output "private_route_table_id" {
 output "default_security_group_id" {
   value = "${aws_vpc.environment.default_security_group_id}"
 }
+
+output "prometheus_security_group_id" {
+  value = "${aws_security_group.vpc_prometheus.id}"
+}

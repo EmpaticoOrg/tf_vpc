@@ -161,3 +161,22 @@ resource "aws_route53_record" "bastion" {
   ttl     = "300"
   records = ["${aws_instance.bastion.public_ip}"]
 }
+
+resource "aws_security_group" "vpc_prometheus" {
+  name = "${var.environment}-vpc_prometheus"
+  description = "Allow inbound Prometheus traffic"
+
+  ingress {
+      from_port = 9090
+      to_port = 9090
+      protocol = "tcp"
+      cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  ingress {
+      from_port = 9100
+      to_port = 9100
+      protocol = "tcp"
+      cidr_blocks = ["10.0.0.0/8"]
+  }
+}
