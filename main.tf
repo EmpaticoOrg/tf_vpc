@@ -140,14 +140,16 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_instance" "bastion" {
-  ami                         = "${data.aws_ami.base_ami.id}"
-  instance_type               = "${var.instance_type}"
-  key_name                    = "${var.key_name}"
-  monitoring                  = true
-  vpc_security_group_ids      = [
+  ami           = "${data.aws_ami.base_ami.id}"
+  instance_type = "${var.instance_type}"
+  key_name      = "${var.key_name}"
+  monitoring    = true
+
+  vpc_security_group_ids = [
     "${aws_security_group.bastion.id}",
-    "${aws_security_group.prometheus.id}"
+    "${aws_security_group.prometheus.id}",
   ]
+
   subnet_id                   = "${aws_subnet.public.*.id[0]}"
   associate_public_ip_address = true
 
@@ -166,20 +168,21 @@ resource "aws_route53_record" "bastion" {
 }
 
 resource "aws_security_group" "prometheus" {
-  name = "${var.environment}-prometheus"
+  name        = "${var.environment}-prometheus"
+  vpc_id      = "${aws_vpc.environment.id}"
   description = "Allow inbound Prometheus traffic"
 
   ingress {
-      from_port = 9090
-      to_port = 9090
-      protocol = "tcp"
-      cidr_blocks = ["10.0.0.0/8"]
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
   }
 
   ingress {
-      from_port = 9100
-      to_port = 9100
-      protocol = "tcp"
-      cidr_blocks = ["10.0.0.0/8"]
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/8"]
   }
 }
