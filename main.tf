@@ -185,4 +185,8 @@ resource "aws_security_group" "prometheus" {
     protocol    = "tcp"
     cidr_blocks = ["${var.vpc_cidr}"]
   }
+
+  tags {
+    Name = "${var.environment}-prometheus-sg"
+  }
 }
