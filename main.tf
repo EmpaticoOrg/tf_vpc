@@ -2,6 +2,15 @@ data "aws_route53_zone" "domain" {
   name = "${var.domain}."
 }
 
+data "aws_ami" "base_ami" {
+  filter {
+    name   = "tag:Role"
+    values = ["base"]
+  }
+
+  most_recent = true
+}
+
 resource "aws_vpc" "environment" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
@@ -131,8 +140,8 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_instance" "bastion" {
-  ami                         = "${lookup(var.bastion_ami, var.region)}"
-  instance_type               = "${var.bastion_instance_type}"
+  ami                         = "${data.aws_ami.base_ami.id}"
+  instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
   monitoring                  = true
   vpc_security_group_ids      = ["${aws_security_group.bastion.id}"]

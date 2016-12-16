@@ -1,7 +1,3 @@
-variable "region" {
-  description = "The AWS region."
-}
-
 variable "environment" {
   description = "The name of our environment, i.e. development."
 }
@@ -28,32 +24,9 @@ variable "private_subnets" {
   description = "The list of private subnets to populate."
 }
 
-variable "ami" {
-  default = {
-    "us-east-1" = "ami-f652979b"
-    "us-west-1" = "ami-7c4b331c"
-  }
-
-  description = "The AMIs to use for web and app instances."
-}
-
 variable "instance_type" {
   default     = "t2.micro"
   description = "The instance type to launch "
-}
-
-variable "bastion_instance_type" {
-  default     = "t2.micro"
-  description = "The bastion host instance type."
-}
-
-variable "bastion_ami" {
-  default = {
-    "us-east-1" = "ami-f652979b"
-    "us-west-1" = "ami-7c4b331c"
-  }
-
-  description = "The bastion host AMIs."
 }
 
 variable "enable_dns_hostnames" {
