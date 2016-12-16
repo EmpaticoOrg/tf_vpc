@@ -144,7 +144,10 @@ resource "aws_instance" "bastion" {
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
   monitoring                  = true
-  vpc_security_group_ids      = ["${aws_security_group.bastion.id}"]
+  vpc_security_group_ids      = [
+    "${aws_security_group.bastion.id}",
+    "${aws_security_group.prometheus.id}"
+  ]
   subnet_id                   = "${aws_subnet.public.*.id[0]}"
   associate_public_ip_address = true
 
@@ -162,8 +165,8 @@ resource "aws_route53_record" "bastion" {
   records = ["${aws_instance.bastion.public_ip}"]
 }
 
-resource "aws_security_group" "vpc_prometheus" {
-  name = "${var.environment}-vpc_prometheus"
+resource "aws_security_group" "prometheus" {
+  name = "${var.environment}-prometheus"
   description = "Allow inbound Prometheus traffic"
 
   ingress {
