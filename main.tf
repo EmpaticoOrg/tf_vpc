@@ -150,6 +150,7 @@ resource "aws_instance" "bastion" {
 
   tags {
     Name = "${var.environment}-bastion"
+    Role = "${var.role}"
   }
 }
 

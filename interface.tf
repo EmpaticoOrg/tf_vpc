@@ -10,6 +10,10 @@ variable "key_name" {
   description = "The AWS key pair to use for resources."
 }
 
+variable "role" {
+  description = "The role"
+}
+
 variable "vpc_cidr" {
   description = "The CIDR of the VPC."
 }
