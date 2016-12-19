@@ -139,11 +139,17 @@ resource "aws_security_group" "bastion" {
   }
 }
 
+resource "aws_iam_instance_profile" "consul" {
+  name  = "consul"
+  roles = ["ConsulInit"]
+}
+
 resource "aws_instance" "bastion" {
-  ami           = "${data.aws_ami.base_ami.id}"
-  instance_type = "${var.instance_type}"
-  key_name      = "${var.key_name}"
-  monitoring    = true
+  ami                  = "${data.aws_ami.base_ami.id}"
+  instance_type        = "${var.instance_type}"
+  key_name             = "${var.key_name}"
+  monitoring           = true
+  iam_instance_profile = "${aws_iam_instance_profile.consul.name}"
 
   vpc_security_group_ids = [
     "${aws_security_group.bastion.id}",
