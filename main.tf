@@ -140,8 +140,8 @@ resource "aws_security_group" "bastion" {
 }
 
 resource "aws_iam_instance_profile" "consul" {
-  name  = "consul"
-  roles = ["ConsulInit"]
+  name_prefix = "consul"
+  roles       = ["ConsulInit"]
 }
 
 resource "aws_instance" "bastion" {
