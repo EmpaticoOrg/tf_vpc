@@ -153,7 +153,7 @@ resource "aws_instance" "bastion" {
 
   vpc_security_group_ids = [
     "${aws_security_group.bastion.id}",
-    "${aws_security_group.prometheus.id}",
+    "${aws_security_group.riemann.id}",
   ]
 
   subnet_id                   = "${aws_subnet.public.*.id[0]}"
@@ -173,26 +173,19 @@ resource "aws_route53_record" "bastion" {
   records = ["${aws_instance.bastion.public_ip}"]
 }
 
-resource "aws_security_group" "prometheus" {
-  name        = "${var.environment}-prometheus"
+resource "aws_security_group" "riemann" {
+  name        = "${var.environment}-riemann"
   vpc_id      = "${aws_vpc.environment.id}"
-  description = "Allow inbound Prometheus traffic"
+  description = "Allow inbound riemann traffic"
 
   ingress {
-    from_port   = 9090
-    to_port     = 9090
-    protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr}"]
-  }
-
-  ingress {
-    from_port   = 9100
-    to_port     = 9100
+    from_port   = 5555
+    to_port     = 5555
     protocol    = "tcp"
     cidr_blocks = ["${var.vpc_cidr}"]
   }
 
   tags {
-    Name = "${var.environment}-prometheus-sg"
+    Name = "${var.environment}-riemann-sg"
   }
 }
