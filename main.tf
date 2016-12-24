@@ -1,16 +1,3 @@
-data "aws_route53_zone" "domain" {
-  name = "${var.domain}."
-}
-
-data "aws_ami" "base_ami" {
-  filter {
-    name   = "tag:Role"
-    values = ["base"]
-  }
-
-  most_recent = true
-}
-
 resource "aws_vpc" "environment" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
@@ -106,71 +93,6 @@ resource "aws_nat_gateway" "environment" {
 
   allocation_id = "${aws_eip.environment.*.id[count.index]}"
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
-}
-
-resource "aws_security_group" "bastion" {
-  vpc_id      = "${aws_vpc.environment.id}"
-  name        = "${var.environment}-bastion-host"
-  description = "Allow SSH to bastion host"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 8
-    to_port     = 0
-    protocol    = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags {
-    Name = "${var.environment}-bastion-sg"
-  }
-}
-
-resource "aws_iam_instance_profile" "consul" {
-  name_prefix = "consul"
-  roles       = ["ConsulInit"]
-}
-
-resource "aws_instance" "bastion" {
-  ami                  = "${data.aws_ami.base_ami.id}"
-  instance_type        = "${var.instance_type}"
-  key_name             = "${var.key_name}"
-  monitoring           = true
-  iam_instance_profile = "${aws_iam_instance_profile.consul.name}"
-
-  vpc_security_group_ids = [
-    "${aws_security_group.bastion.id}",
-    "${aws_security_group.riemann.id}",
-  ]
-
-  subnet_id                   = "${aws_subnet.public.*.id[0]}"
-  associate_public_ip_address = true
-
-  tags {
-    Name = "${var.environment}-bastion"
-    Role = "${var.role}"
-  }
-}
-
-resource "aws_route53_record" "bastion" {
-  zone_id = "${data.aws_route53_zone.domain.zone_id}"
-  name    = "bastion.${data.aws_route53_zone.domain.name}"
-  type    = "A"
-  ttl     = "300"
-  records = ["${aws_instance.bastion.public_ip}"]
 }
 
 resource "aws_security_group" "riemann" {
