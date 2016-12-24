@@ -108,14 +108,20 @@ resource "aws_security_group" "core" {
     from_port   = 5555
     to_port     = 5555
     protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr}"]
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}"
+    ]
   }
 
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["${var.vpc_cidr}"]
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}"
+    ]
   }
 
   tags {
