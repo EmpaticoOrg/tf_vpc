@@ -31,6 +31,11 @@ variable "enable_nat_gateway" {
   default     = false
 }
 
+variable "map_public_ip_on_launch" {
+  description = "Should be false if you do not want to auto-assign public IP on launch"
+  default     = true
+}
+
 output "vpc_id" {
   value = "${aws_vpc.environment.id}"
 }
