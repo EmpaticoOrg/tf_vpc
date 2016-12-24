@@ -26,6 +26,11 @@ variable "enable_dns_support" {
   default     = true
 }
 
+variable "enable_nat_gateway" {
+  description = "should be true if you want to provision NAT Gateways for each of your private networks"
+  default     = false
+}
+
 output "vpc_id" {
   value = "${aws_vpc.environment.id}"
 }

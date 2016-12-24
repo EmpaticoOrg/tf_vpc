@@ -40,7 +40,7 @@ resource "aws_route" "public_internet_gateway" {
 }
 
 resource "aws_route" "private_nat_gateway" {
-  count                  = "${length(var.private_subnets)}"
+  count                  = "${length(var.private_subnets) * lookup(map(var.enable_nat_gateway, 1), "true", 0)}"
   route_table_id         = "${aws_route_table.private.*.id[count.index]}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = "${aws_nat_gateway.environment.*.id[count.index]}"
@@ -89,7 +89,7 @@ resource "aws_eip" "environment" {
 }
 
 resource "aws_nat_gateway" "environment" {
-  count = "${length(var.public_subnets)}"
+  count = "${length(var.private_subnets) * lookup(map(var.enable_nat_gateway, 1), "true", 0)}"
 
   allocation_id = "${aws_eip.environment.*.id[count.index]}"
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
