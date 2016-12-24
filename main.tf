@@ -126,6 +126,39 @@ resource "aws_security_group" "core" {
     ]
   }
 
+  ingress {
+    from_port = 8300
+    to_port   = 8300
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
+    ]
+  }
+
+  ingress {
+    from_port = 8301
+    to_port   = 8301
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
+    ]
+  }
+
+  ingress {
+    from_port = 8301
+    to_port   = 8301
+    protocol  = "udp"
+
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
+    ]
+  }
+
   tags {
     Name = "core-to-${var.environment}-sg"
   }
