@@ -64,6 +64,6 @@ output "default_security_group_id" {
   value = "${aws_vpc.environment.default_security_group_id}"
 }
 
-output "riemann_security_group_id" {
-  value = "${aws_security_group.riemann.id}"
+output "core_security_group_id" {
+  value = "${aws_security_group.core.id}"
 }
