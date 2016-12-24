@@ -102,7 +102,7 @@ resource "aws_nat_gateway" "environment" {
 resource "aws_security_group" "core" {
   name        = "core-to-${var.environment}"
   vpc_id      = "${aws_vpc.environment.id}"
-  description = "Allow inbound riemann traffic"
+  description = "Allow inbound core monitoring and bastion traffic"
 
   ingress {
     from_port   = 5555
