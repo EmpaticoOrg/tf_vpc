@@ -2,10 +2,6 @@ variable "environment" {
   description = "The name of our environment, i.e. development."
 }
 
-variable "role" {
-  description = "The role"
-}
-
 variable "vpc_cidr" {
   description = "The CIDR of the VPC."
 }
