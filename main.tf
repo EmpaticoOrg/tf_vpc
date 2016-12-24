@@ -1,3 +1,7 @@
+data "aws_vpc" "core" {
+  default = true
+}
+
 resource "aws_vpc" "environment" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
@@ -95,8 +99,8 @@ resource "aws_nat_gateway" "environment" {
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
 }
 
-resource "aws_security_group" "riemann" {
-  name        = "${var.environment}-riemann"
+resource "aws_security_group" "core" {
+  name        = "core-to-${var.environment}"
   vpc_id      = "${aws_vpc.environment.id}"
   description = "Allow inbound riemann traffic"
 
@@ -107,7 +111,14 @@ resource "aws_security_group" "riemann" {
     cidr_blocks = ["${var.vpc_cidr}"]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${var.vpc_cidr}"]
+  }
+
   tags {
-    Name = "${var.environment}-riemann-sg"
+    Name = "core-to-${var.environment}-sg"
   }
 }
