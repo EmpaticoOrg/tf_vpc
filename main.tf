@@ -57,6 +57,7 @@ resource "aws_subnet" "public" {
 
   tags {
     Name = "${var.environment}-public-${count.index}"
+    Environment = "${var.environment}"
   }
 
   count = "${length(var.public_subnets)}"
@@ -69,6 +70,7 @@ resource "aws_subnet" "private" {
 
   tags {
     Name = "${var.environment}-private-${count.index}"
+    Environment = "${var.environment}"
   }
 
   count = "${length(var.private_subnets)}"
