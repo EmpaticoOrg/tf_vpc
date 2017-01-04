@@ -56,7 +56,7 @@ resource "aws_subnet" "public" {
   map_public_ip_on_launch = "${var.map_public_ip_on_launch}"
 
   tags {
-    Name = "${var.environment}-public-${count.index}"
+    Name        = "${var.environment}-public-${count.index}"
     Environment = "${var.environment}"
   }
 
@@ -69,7 +69,7 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = "false"
 
   tags {
-    Name = "${var.environment}-private-${count.index}"
+    Name        = "${var.environment}-private-${count.index}"
     Environment = "${var.environment}"
   }
 
@@ -164,6 +164,17 @@ resource "aws_security_group" "core" {
   ingress {
     from_port = 8301
     to_port   = 8301
+    protocol  = "udp"
+
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
+    ]
+  }
+
+  ingress {
+    from_port = 4222
+    to_port   = 4222
     protocol  = "udp"
 
     cidr_blocks = [
