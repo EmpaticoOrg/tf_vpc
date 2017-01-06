@@ -109,6 +109,17 @@ resource "aws_security_group" "core" {
   ingress {
     from_port = 5555
     to_port   = 5555
+    protocol  = "udp"
+
+    cidr_blocks = [
+      "${data.aws_vpc.environment.cidr_block}",
+      "${data.aws_vpc.development.cidr_block}",
+    ]
+  }
+
+  ingress {
+    from_port = 5555
+    to_port   = 5555
     protocol  = "tcp"
 
     cidr_blocks = [
