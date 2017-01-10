@@ -186,7 +186,18 @@ resource "aws_security_group" "core" {
   ingress {
     from_port = 4222
     to_port   = 4222
-    protocol  = "udp"
+    protocol  = "tcp"
+
+    cidr_blocks = [
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
+    ]
+  }
+
+  ingress {
+    from_port = 8140
+    to_port   = 8140
+    protocol  = "tcp"
 
     cidr_blocks = [
       "${var.vpc_cidr}",
