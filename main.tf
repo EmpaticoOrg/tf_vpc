@@ -112,8 +112,8 @@ resource "aws_security_group" "core" {
     protocol  = "udp"
 
     cidr_blocks = [
-      "${data.aws_vpc.environment.cidr_block}",
-      "${data.aws_vpc.development.cidr_block}",
+      "${var.vpc_cidr}",
+      "${data.aws_vpc.core.cidr_block}",
     ]
   }
 
