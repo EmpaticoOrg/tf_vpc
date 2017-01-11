@@ -2,6 +2,11 @@ data "aws_vpc" "core" {
   default = true
 }
 
+data "aws_route53_zone" "core" {
+  name = "core."
+  private_zone = true
+}
+
 resource "aws_vpc" "environment" {
   cidr_block           = "${var.vpc_cidr}"
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
@@ -10,6 +15,11 @@ resource "aws_vpc" "environment" {
   tags {
     Name = "${var.environment}"
   }
+}
+
+resource "aws_route53_zone_association" "core" {
+  zone_id = "${data.aws_route53_zone.core.zone_id}"
+  vpc_id = "${aws_vpc.environment.id}"
 }
 
 resource "aws_internet_gateway" "environment" {
