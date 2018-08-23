@@ -53,11 +53,11 @@ output "private_subnet_ids" {
 }
 
 output "public_route_table_id" {
-  value = "${aws_route_table.public.id}"
+  value = ["${aws_route_table.public.*.id}"]
 }
 
 output "private_route_table_id" {
-  value = "${aws_route_table.private.id}"
+  value = ["${aws_route_table.private.*.id}"]
 }
 
 output "default_security_group_id" {
